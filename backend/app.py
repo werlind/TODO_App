@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Importuj Flask-CORS
+from flask_cors import CORS  
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
-CORS(app)  # Włącz obsługę CORS dla wszystkich endpointów
+CORS(app)  
 
-# Funkcja łączenia z bazą danych
+
 def get_db_connection():
     conn = psycopg2.connect(
-        host="db",  # Nazwa usługi bazy danych w Docker Compose
+        host="db",  
         database="todo",
         user="postgres",
         password="postgres"
@@ -22,12 +22,11 @@ def tasks():
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     if request.method == 'POST':
-        # Pobierz dane z żądania
-        task = request.json.get('task')  # Sprawdź, czy to pole się zgadza z frontendem
+        task = request.json.get('task')  
         if not task:
             return jsonify({"error": "Task content is required"}), 400
 
-        # Wstaw zadanie do bazy danych
+  
         cursor.execute("INSERT INTO tasks (task) VALUES (%s) RETURNING *;", (task,))
         new_task = cursor.fetchone()
         conn.commit()
@@ -48,12 +47,11 @@ def modify_task(task_id):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     if request.method == 'PUT':
-        # Pobierz dane z żądania
         task = request.json.get('task')
         if not task:
             return jsonify({"error": "Task content is required"}), 400
 
-        # Aktualizuj zadanie w bazie danych
+
         cursor.execute("UPDATE tasks SET task = %s WHERE id = %s RETURNING *;", (task, task_id))
         updated_task = cursor.fetchone()
         conn.commit()
@@ -64,7 +62,6 @@ def modify_task(task_id):
         return jsonify(updated_task), 200
 
     if request.method == 'DELETE':
-        # Usuń zadanie z bazy danych
         cursor.execute("DELETE FROM tasks WHERE id = %s RETURNING *;", (task_id,))
         deleted_task = cursor.fetchone()
         conn.commit()

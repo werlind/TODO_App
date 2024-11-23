@@ -57,7 +57,7 @@ async function addTask() {
     }
 }
 
-// Zaktualizuj zadanie
+
 async function updateTask(taskId, newContent) {
     const updatedTask = { task: newContent };
     const response = await fetch(`${apiBaseUrl}/tasks/${taskId}`, {
@@ -68,23 +68,22 @@ async function updateTask(taskId, newContent) {
         body: JSON.stringify(updatedTask),
     });
     if (response.ok) {
-        fetchTasks(); // Odśwież listę
+        fetchTasks(); 
     } else {
         alert('Error updating task.');
     }
 }
 
-// Usuń zadanie
+
 async function deleteTask(taskId) {
     const response = await fetch(`${apiBaseUrl}/tasks/${taskId}`, {
         method: 'DELETE',
     });
     if (response.ok) {
-        fetchTasks(); // Odśwież listę
+        fetchTasks(); 
     } else {
         alert('Error deleting task.');
     }
 }
 
-// Załaduj listę zadań na starcie
 fetchTasks();
