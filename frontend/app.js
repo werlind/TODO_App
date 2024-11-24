@@ -1,4 +1,4 @@
-const apiBaseUrl = "http://localhost:8080";
+const apiBaseUrl = "http://localhost:8000";
 
 // Pobierz wszystkie zadania
 async function fetchTasks() {
