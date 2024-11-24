@@ -8,16 +8,20 @@ async function fetchTasks() {
     taskList.innerHTML = '';
     tasks.forEach(task => {
         const li = document.createElement('li');
+        li.className = "task-item";
 
         // Wyświetl treść zadania
         const taskText = document.createElement('span');
         taskText.textContent = task.task;
-        taskText.style.marginRight = '10px';
 
-        // Przycisk do edycji
+        // Kontener na przyciski
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = "task-item-buttons";
+
+        // Przycisk edycji
         const editButton = document.createElement('button');
+        editButton.className = 'btn btn-edit';
         editButton.textContent = 'Edit';
-        editButton.style.marginRight = '5px';
         editButton.onclick = () => {
             const newContent = prompt('Edit task:', task.task);
             if (newContent) {
@@ -25,15 +29,19 @@ async function fetchTasks() {
             }
         };
 
-        // Przycisk do usuwania
+        // Przycisk usunięcia
         const deleteButton = document.createElement('button');
+        deleteButton.className = 'btn btn-delete';
         deleteButton.textContent = 'Delete';
         deleteButton.onclick = () => deleteTask(task.id);
 
+        // Dodaj przyciski do kontenera
+        buttonContainer.appendChild(editButton);
+        buttonContainer.appendChild(deleteButton);
+
         // Dodaj elementy do listy
         li.appendChild(taskText);
-        li.appendChild(editButton);
-        li.appendChild(deleteButton);
+        li.appendChild(buttonContainer);
         taskList.appendChild(li);
     });
 }
@@ -57,7 +65,6 @@ async function addTask() {
     }
 }
 
-
 async function updateTask(taskId, newContent) {
     const updatedTask = { task: newContent };
     const response = await fetch(`${apiBaseUrl}/tasks/${taskId}`, {
@@ -68,19 +75,18 @@ async function updateTask(taskId, newContent) {
         body: JSON.stringify(updatedTask),
     });
     if (response.ok) {
-        fetchTasks(); 
+        fetchTasks();
     } else {
         alert('Error updating task.');
     }
 }
-
 
 async function deleteTask(taskId) {
     const response = await fetch(`${apiBaseUrl}/tasks/${taskId}`, {
         method: 'DELETE',
     });
     if (response.ok) {
-        fetchTasks(); 
+        fetchTasks();
     } else {
         alert('Error deleting task.');
     }

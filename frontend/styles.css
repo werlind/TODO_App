@@ -64,11 +64,12 @@ h1 {
 }
 
 .btn-edit {
-    background: #ffc107;
+    background: #28a745;
+    margin-right: 5px;
 }
 
 .btn-delete {
-    background: #e74c3c;
+    background: #dc3545;
 }
 
 .btn-add {
